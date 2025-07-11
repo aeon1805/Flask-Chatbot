@@ -26,7 +26,8 @@ def detect_emotion(text):
     return results[0]['label'], results[0]['score']
 
 def get_weather(city):
-    api_key = '8f66dd721fccc152fb5fb8feb1a4a1c4'
+    import os
+    api_key = os.environ.get("OPENWEATHERMAP_KEY")
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
     response = requests.get(url).json()
     if response.get("cod") != 200:
