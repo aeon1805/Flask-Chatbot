@@ -1,0 +1,6 @@
+flask
+transformers
+torch
+nltk
+requests
+pytz
