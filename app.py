@@ -19,7 +19,7 @@ pairs = [
     ['(.*) your name?', ['My name is A.D.I.']]
 ]
 chat = Chat(pairs, reflections)
-HF_TOKEN = os.getenv("HF_TOKEN") or "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"
+HF_TOKEN = os.getenv("HF_TOKEN") or "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"
 def detect_emotion(text):
     headers = {
         "Authorization": f"Bearer {HF_TOKEN}"
