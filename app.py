@@ -5,7 +5,7 @@ from transformers import pipeline
 from datetime import datetime
 import pytz
 import re
-
+import os
 app = Flask(__name__)
 emotion_classifier = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base", return_all_scores=True)
 
@@ -19,14 +19,19 @@ pairs = [
     ['(.*) your name?', ['My name is A.D.I.']]
 ]
 chat = Chat(pairs, reflections)
-
+HF_TOKEN = os.getenv("HF_TOKEN") or "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"
 def detect_emotion(text):
-    results = emotion_classifier(text)[0]
-    results.sort(key=lambda x: x['score'], reverse=True)
-    return results[0]['label'], results[0]['score']
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}"
+    }
+    API_URL = "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base"
+    payload = {"inputs": text}
+    response = requests.post(API_URL, headers=headers, json=payload)
+    results = response.json()[0]
+    results.sort(key=lambda x: x["score"], reverse=True)
+    return results[0]["label"], results[0]["score"]
 
 def get_weather(city):
-    import os
     api_key = os.environ.get("OPENWEATHERMAP_KEY")
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
     response = requests.get(url).json()
